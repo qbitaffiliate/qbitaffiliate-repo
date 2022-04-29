@@ -1,6 +1,7 @@
 from re import match, findall
 from threading import Thread, Event
 from time import time
+import datetime
 from math import ceil
 from html import escape
 from psutil import virtual_memory, cpu_percent, disk_usage
@@ -106,8 +107,8 @@ def get_progress_bar_string(status):
     p = 0 if total == 0 else round(completed * 100 / total)
     p = min(max(p, 0), 100)
     cFull = p // 8
-    p_str = '■' * cFull
-    p_str += '□' * (12 - cFull)
+    p_str = '⬤' * cFull
+    p_str += '○' * (10 - cFull)
     p_str = f"[{p_str}]"
     return p_str
 
@@ -138,13 +139,15 @@ def get_readable_message():
                 else:
                     msg += f"\n<b>Downloaded:</b> {get_readable_file_size(download.processed_bytes())} of {download.size()}"
                 msg += f"\n<b>Speed:</b> {download.speed()} | <b>ETA:</b> {download.eta()}"
+                msg += f'\n<b>User:</b> <a href="https://t.me/Movie_leecher/{download.message.message_id}">{download.message.from_user.first_name}</a>'
+                msg += f"\n<b>Elapsed: </b>{get_readable_time(time() - download.message.date.timestamp())}"
                 try:
-                    msg += f"\n<b>Seeders:</b> {download.aria_download().num_seeders}" \
+                    msg += f"\n<b>Engine: </b><code>Aria2</code>\n<b>Seeders:</b> {download.aria_download().num_seeders}" \
                            f" | <b>Peers:</b> {download.aria_download().connections}"
                 except:
                     pass
                 try:
-                    msg += f"\n<b>Seeders:</b> {download.torrent_info().num_seeds}" \
+                    msg += f"\n<b>Engine: </b><code>qBittorrent</code>\n<b>Seeders:</b> {download.torrent_info().num_seeds}" \
                            f" | <b>Leechers:</b> {download.torrent_info().num_leechs}"
                 except:
                     pass
