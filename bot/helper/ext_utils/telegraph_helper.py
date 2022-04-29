@@ -78,4 +78,4 @@ class TelegraphHelper:
         return
 
 
-telegraph=TelegraphHelper('Team qbit', 'https://t.me/qbitMirrors
+telegraph=TelegraphHelper('Team qbit', 'https://t.me/qbitMirrors')
